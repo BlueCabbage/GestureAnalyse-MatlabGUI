@@ -1,13 +1,18 @@
  
-  This is a Attitude Estimator real time display and analyze app
+  This is a gesture  Attitude Estimator real time display app, and support save angle date to txt file that can be used to offline analyse. 
       
-      Develop use matlab GUI. 
+      Develop with matlab GUI. 
        
          Communciate with the detector MCU by serial port.
 	  
-	     MAX support three ports.
+		 transmit procoto:
 
+			every frame format:
+			
+			"'%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f', sesor_ID, data(1:9) " 
 			
 
-	                        ZHAOCHAO    479680168@qq.com
-				   2016-5-11
+	                                            
+			
+			                                         ZHAOCHAO    479680168@qq.com
+																	2016-9-13
