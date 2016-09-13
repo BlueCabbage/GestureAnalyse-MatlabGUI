@@ -294,7 +294,7 @@ function sub_f_callback(s, BytesAvailable, handles, editout, edit, edit14, edit2
 
             result_tmp = get(edit, 'string');
 
-            str_dat = sprintf('[out]: %8.4f, %8.4f, %8.4f', data2(1), data2(2), data2(3));
+            str_dat = sprintf('[out]: %8.4f, %8.4f, %8.4f', data2(2), data2(3), data2(4));
             result_tmp = strvcat(result_tmp, str_dat);
 
             set(edit, 'string', result_tmp );

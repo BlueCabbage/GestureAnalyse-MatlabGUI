@@ -1456,6 +1456,15 @@ global record_count1 record_count2 record_count3 save_file start_record record_d
 
 global dat1_tmp;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% to Make sure that the serial port has been close
+
+s = instrfind;
+if size(s) ~= [0,0]
+    fclose(s);
+    delete(s);
+end
+
 
 dat1_tmp = zeros(3, 1);
 
@@ -1539,9 +1548,10 @@ hy3 = plot(PlotAxes_t3, PlotAxes3(2,:), '-sb');
 hz3 = plot(PlotAxes_t3, PlotAxes3(2,:), '-*r');
 
 grid on;
-axis([0, PlotAxesLen, -7, 7]);
+axis([0, PlotAxesLen, -1.5, 1.5]);
 
-legend('angle-X', 'angle-Y', 'andgle-Z');
+% legend('angle-X', 'angle-Y', 'andgle-Z');
+legend('output-X', 'output-Y', 'output-R');
 
 
 
@@ -1941,17 +1951,21 @@ function button_clear_Callback(hObject, eventdata, handles)
 % hObject    handle to button_clear (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global record_count save_file start_record record_dat1 record_dat2 record_dat3;
+global save_file start_record record_dat1 record_dat2 record_dat3;
+global record_count1 record_count2 record_count3;
 
 set(handles.editrecordnum, 'string', '0 : 0 : 0');
 
 start_record = 0;
-record_count = 0;
+record_count1 = 0;
+record_count2 = 0;
+record_count3 = 0;
+
 save_file = '';
 
-record_dat1 = zeros(1,9);
-record_dat2 = zeros(1,9);
-record_dat3 = zeros(1,9);
+record_dat1 = zeros(1,10);
+record_dat2 = zeros(1,10);
+record_dat3 = zeros(1,10);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% 
@@ -1961,6 +1975,7 @@ PlotAxes_ttmp = [1: 30];
 PlotAxes_tmp = zeros(3, 30);
 
 axes(handles.axes8);
+hold off;
 plot(PlotAxes_ttmp, PlotAxes_tmp(1,:), '-^g');
 hold on;
 plot(PlotAxes_ttmp, PlotAxes_tmp(2,:), '-sb');
@@ -1970,6 +1985,7 @@ grid on;
 axis([0, 30, -7, 7]);
 
 axes(handles.axes9);
+hold off;
 plot(PlotAxes_ttmp, PlotAxes_tmp(1,:), '-^g');
 hold on;
 plot(PlotAxes_ttmp, PlotAxes_tmp(2,:), '-sb');
@@ -1979,13 +1995,14 @@ grid on;
 axis([0, 30, -7, 7]);
 
 axes(handles.axes10);
+hold off;
 plot(PlotAxes_ttmp, PlotAxes_tmp(1,:), '-^g');
 hold on;
 plot(PlotAxes_ttmp, PlotAxes_tmp(2,:), '-sb');
 plot(PlotAxes_ttmp, PlotAxes_tmp(3,:), '-*r');
-legend('angle-X', 'angle-Y', 'andgle-Z');
+legend('output-X', 'output-Y', 'output-Z');
 grid on;
-axis([0, 30, -7, 7]);
+axis([0, 30, -1.5, 1.5]);
 
 
 % --- Executes on button press in button_record.
@@ -2127,9 +2144,13 @@ function pushbutton17_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global record_count1 record_count2 record_count3 record_dat1 record_dat2 record_dat3;
+global handles_ana;
 
-open('Gesture_Analyse.fig');
-handles_ana = guihandles;
+
+if exist('handles_ana', 'var') == 1
+    open('Gesture_Analyse.fig');
+    handles_ana = guihandles;
+end
 
 % setappdata(handles.ana, 'record_count1', record_count1);
 % setappdata(handles.ana, 'record_count2', record_count2);

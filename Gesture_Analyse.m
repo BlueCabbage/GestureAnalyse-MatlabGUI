@@ -22,7 +22,7 @@ function varargout = Gesture_Analyse(varargin)
 
 % Edit the above text to modify the response to help Gesture_Analyse
 
-% Last Modified by GUIDE v2.5 01-Sep-2016 16:31:00
+% Last Modified by GUIDE v2.5 13-Sep-2016 13:05:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -147,8 +147,10 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 
 
 global save_file;
-save_file = '';
-set(handles.edit_savepath, 'string', save_file);
+
+
+save_file = ' ';
+% set(handles.edit_savepath, 'string', save_file);
 
 % PlotAxesLen = 50;
 % 
@@ -158,7 +160,7 @@ set(handles.edit_savepath, 'string', save_file);
 % PlotAxes_t3 = [1:PlotAxesLen];
 % PlotAxes3 = zeros(3, PlotAxesLen);
 % 
-% axes(handles.axes1);
+% axes(handles.axes11);
 % plot(PlotAxes_t2, PlotAxes2(1,:), '-^g');
 % hold on;
 % plot(PlotAxes_t2, PlotAxes2(2,:), '-sb');
@@ -170,7 +172,7 @@ set(handles.edit_savepath, 'string', save_file);
 % legend('X_1_#-angle', 'Y_1_#-angle', 'Z_1_#-angle');
 % 
 % 
-% axes(handles.axes2);
+% axes(handles.axes12);
 % plot(PlotAxes_t3, PlotAxes3(1,:), '-^g');
 % hold on;
 % plot(PlotAxes_t3, PlotAxes3(2,:), '-sb');
