@@ -110,10 +110,12 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global handles_ana;
 global save_file;
+
 [filename, pathname] = uigetfile('*.*', 'Select a file for save~!');
 save_file = [pathname, filename];
-set(handles.edit_savepath, 'string', save_file);
+set(handles_ana.edit_savepath, 'string', sprintf('%s', save_file));
 
 
 % --- Executes during object creation, after setting all properties.

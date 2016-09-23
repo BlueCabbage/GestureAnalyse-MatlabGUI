@@ -10,7 +10,7 @@ global handles_ana;
 record_count_min = min(record_count1, record_count2);
 record_count_min = min(record_count_min, record_count3);
 
-record_angle = record_dat1(2:record_count_min, 1:3) - record_dat2(2:record_count_min, 1:3);
+record_angle = record_dat1(2:record_count_min, 2:4) - record_dat2(2:record_count_min, 2:4);
 record_angle = [4*ones(record_count_min-1, 1), record_angle];
 
 
