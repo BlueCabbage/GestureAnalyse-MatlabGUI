@@ -50,8 +50,8 @@ if (strcmpi(save_file, '') ~= 1)
    
    fclose(save_fid);
    
-   save_datfile = [save_file, '.dat'];
-   save save_datfile record_dat1 record_dat2 record_dat3 -ascii
+   
+   save save.dat 变量名 -ascii
    
 end
 

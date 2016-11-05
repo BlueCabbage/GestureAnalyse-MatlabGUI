@@ -530,7 +530,7 @@ if(judge0 == 1)
     s = serial(currentcom{COM_value});
     
     set(s,'BaudRate', 57600, 'DataBits',currentdata(1,DATA_value),...  %������ЧCOM��
-         'Parity',currentcheck{CHECK_value},'StopBits',currentstop(1,STOP_value),'FlowControl','none','InputBufferSize',100);
+         'Parity',currentcheck{CHECK_value},'StopBits',currentstop(1,STOP_value),'FlowControl','none','InputBufferSize',1000);
     s.BytesAvailableFcnMode = 'terminator';  
     s.BytesAvailableFcn = {@sub_f_callback, handles, handles.editout, handles.editsp, handles.edit11, handles.edit21, handles.edit31, ...
         handles.edit12, handles.edit22, handles.edit32, handles.edit13, handles.edit23, handles.edit33, handles.edit17, handles.edit27, handles.edit37};  
@@ -1435,6 +1435,8 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton7 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global tmp_index;
+tmp_index = 0;
 
 global  h12 ho1 ho2 hpx1 hpy1 hpz1 hpx2 hpy2 hpz2 htx1 hty1 htz1 htx2 hty2 htz2 BaseAxes1 BaseAxes2 AxesOffset2 hpx22 hpy22 hpz22;
 global  hx hy hz PlotAxes PlotAxesLen PlotAxes_t axes_plot; 
@@ -1524,7 +1526,8 @@ hy = plot(PlotAxes_t, PlotAxes(2,:), '-sb');
 hz = plot(PlotAxes_t, PlotAxes(2,:), '-*r');
 
 grid on;
-axis([0, PlotAxesLen, -7, 7]);
+axis([0, PlotAxesLen, -1.5, 1.5]);
+% axis([0, PlotAxesLen, -7, 7]);
 
 legend('X_1_#-angle', 'Y_1_#-angle', 'Z_1_3-angle');
 
@@ -1536,7 +1539,8 @@ hy2 = plot(PlotAxes_t2, PlotAxes2(2,:), '-sb');
 hz2 = plot(PlotAxes_t2, PlotAxes2(2,:), '-*r');
 
 grid on;
-axis([0, PlotAxesLen, -7, 7]);
+axis([0, PlotAxesLen, -1.5, 1.5]);
+% axis([0, PlotAxesLen, -7, 7]);
 
 legend('X_2_#-angle', 'Y_2_#-angle', 'Z_2_#-angle');
 
@@ -1551,7 +1555,8 @@ grid on;
 axis([0, PlotAxesLen, -1.5, 1.5]);
 
 % legend('angle-X', 'angle-Y', 'andgle-Z');
-legend('output-X', 'output-Y', 'output-R');
+legend('X_3_#-angle', 'Y_3_#-angle', 'Z_3_#-angle');
+%legend('output-X', 'output-Y', 'output-R');
 
 
 
