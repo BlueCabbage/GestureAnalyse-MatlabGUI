@@ -260,11 +260,16 @@ m_delta_origin_acc = zeros(1, origin_size);
 m_delta_origin_gyro = zeros(1, origin_size);
 
 for index = 1 : origin_size
+% % %     m_delta_origin_acc(index) = sqrt( abs(delta_origin_acc(index, 1) .* delta_origin_acc(index, 1) ...
+% % %                             + delta_origin_acc(index, 2) .* delta_origin_acc(index, 2) ...
+% % %                             + delta_origin_acc(index, 3) .* delta_origin_acc(index, 3)));
+% % %     m_delta_origin_gyro(index) = sqrt( abs(delta_origin_left_gyro(index, 1) .* delta_origin_gyro(index, 1) ...
+% % %                             + delta_origin_gyro(index, 2) .* delta_origin_gyro(index, 2) ...
+% % %                             + delta_origin_gyro(index, 3) .* delta_origin_gyro(index, 3)));
+
     m_delta_origin_acc(index) = sqrt( abs(delta_origin_acc(index, 1) .* delta_origin_acc(index, 1) ...
-                            + delta_origin_acc(index, 2) .* delta_origin_acc(index, 2) ...
                             + delta_origin_acc(index, 3) .* delta_origin_acc(index, 3)));
     m_delta_origin_gyro(index) = sqrt( abs(delta_origin_left_gyro(index, 1) .* delta_origin_gyro(index, 1) ...
-                            + delta_origin_gyro(index, 2) .* delta_origin_gyro(index, 2) ...
                             + delta_origin_gyro(index, 3) .* delta_origin_gyro(index, 3)));
 end
 
@@ -273,15 +278,18 @@ end
 % % % delta_origin_left_gyro ./ delta_origin_left_acc
 % % % delta_origin_left_gyro ./ delta_origin_acc 
 
-kdt = (m_delta_origin_gyro ./ m_delta_origin_acc)
+kdt = (m_delta_origin_gyro ./ m_delta_origin_acc);
 
 %%%% mean
+display('origin[m_gyro/m_delta_acc]_mean: ');
 mean(kdt)
 
 %%%% var
+display('origin[m_gyro/m_delta_acc]_var: ')
 var(kdt)
 
 %%%% std
+display('origin[m_gyro/m_delta_acc]_std: ')
 std(kdt)
 
 % % % origin_left_dt = sum(delta_origin_left_t) / (size(delta_origin_left_t, 1)-1)
@@ -349,19 +357,22 @@ for index = 1 : remote_size -1
 end
 
 delta_remote_acc = (delta_remote_left_acc - delta_remote_right_acc) / 2;
-delta_remote_gyro = (delta_origin_left_gyro - delta_origin_right_gyro) / 2;
+delta_remote_gyro = (delta_remote_left_gyro - delta_remote_right_gyro) / 2;
 delta_remote_att = (delta_remote_left_att - delta_remote_right_att) / 2;
 
 m_delta_remote_acc = zeros(1, remote_size);
 m_delta_remote_gyro = zeros(1, remote_size);
 
 for index = 1 : remote_size
-    m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 1) .* delta_remote_acc(index, 1) ...
-                            + delta_remote_acc(index, 2) .* delta_remote_acc(index, 2) ...
-                            + delta_remote_acc(index, 3) .* delta_remote_acc(index, 3)));
-    m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 1) .* delta_remote_gyro(index, 1) ...
-                            + delta_remote_gyro(index, 2) .* delta_remote_gyro(index, 2) ...
-                            + delta_remote_gyro(index, 3) .* delta_remote_gyro(index, 3)));
+% % %     m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 1) .* delta_remote_acc(index, 1) ...
+% % %                             + delta_remote_acc(index, 2) .* delta_remote_acc(index, 2) ...
+% % %                             + delta_remote_acc(index, 3) .* delta_remote_acc(index, 3)));
+% % %     m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 1) .* delta_remote_gyro(index, 1) ...
+% % %                             + delta_remote_gyro(index, 2) .* delta_remote_gyro(index, 2) ...
+% % %                             + delta_remote_gyro(index, 3) .* delta_remote_gyro(index, 3)));
+                        
+    m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 2) .* delta_remote_acc(index, 2)));
+    m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 2) .* delta_remote_gyro(index, 2)));
 end
 
 % % % tmp_origin_left_att ./ delta_origin_left_acc
@@ -369,15 +380,18 @@ end
 % % % delta_origin_left_gyro ./ delta_origin_left_acc
 % % % delta_origin_left_gyro ./ delta_origin_acc 
 
-kdt = (m_delta_remote_gyro ./ m_delta_remote_acc)
+kdt = (m_delta_remote_gyro ./ m_delta_remote_acc);
 
 %%%% mean
+display('Remote[m_gyro/m_delta_acc]_mean: ');
 mean(kdt)
 
 %%%% var
+display('Remote[m_gyro/m_delta_acc]_var: ');
 var(kdt)
 
 %%%% std
+display('Remote[m_gyro/m_delta_acc]_std: ');
 std(kdt)
 
 figure(4);
