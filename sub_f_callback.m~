@@ -59,7 +59,7 @@ function sub_f_callback(s, BytesAvailable, handles, editout, edit, edit14, edit2
             dat_tmp(8,1) = data(9) - offset_a_y;
             dat_tmp(9,1) = data(10) - offset_a_z;
             
-            plotdat_tmp = [data(8)/5, data(9)/5, data(10)/5]';
+            plotdat_tmp = [data(8), data(9), data(10)]';
             
             PlotAxes_acc1 = [plotdat_tmp, PlotAxes_acc1(:, 1:PlotAxesLen-1)];
 
@@ -190,7 +190,7 @@ function sub_f_callback(s, BytesAvailable, handles, editout, edit, edit14, edit2
             dat_tmp(9,1) = data2(10) - offset_a_z;
 
              
-            plotdat_tmp = [data2(8)/5, data(9)/5, data(10)/5]';
+            plotdat_tmp = [data2(8), data(9), data(10)]';
             
             PlotAxes_acc2 = [plotdat_tmp, PlotAxes_acc2(:, 1:PlotAxesLen-1)];
             
@@ -248,8 +248,7 @@ function sub_f_callback(s, BytesAvailable, handles, editout, edit, edit14, edit2
                   set(hz2, 'XData', PlotAxes_t2, 'YData', PlotAxes2(3,:));
                   
                   set(haccx2, 'XData', PlotAxes_t2, 'YData', PlotAxes_acc2(1,:));
-                  set(haccy2, 'XData', PlotAxes_t2, 'YData', PlotAxes_acc2(2,:));
-                  set(haccz2, 'XData', PlotAxes_t2, 'YData', PlotAxes_acc2(3,:));
+                  set(haccy)
 
                   O_Rm2 = dat2(:, size(dat2, 2));
                   if ~isequal(O_Rm2, zeros(9,1))
@@ -312,10 +311,6 @@ function sub_f_callback(s, BytesAvailable, handles, editout, edit, edit14, edit2
             dat_tmp(1,1) = data3(2);
             dat_tmp(2,1) = data3(3);
             dat_tmp(3,1) = data3(4);
-            
-            plotdat_tmp = [data3(8)/5, data(9)/5, data(10)/5]';
-            
-            PlotAxes_acc3 = [plotdat_tmp, PlotAxes_acc3(:, 1:PlotAxesLen-1)];
 
 
             dat3 = [dat3(:, 2:datLen), dat_tmp];
@@ -340,10 +335,6 @@ function sub_f_callback(s, BytesAvailable, handles, editout, edit, edit14, edit2
                   set(hx3, 'XData', PlotAxes_t3, 'YData', PlotAxes3(1,:));
                   set(hy3, 'XData', PlotAxes_t3, 'YData', PlotAxes3(2,:));
                   set(hz3, 'XData', PlotAxes_t3, 'YData', PlotAxes3(3,:));
-                  
-                  set(haccx3, 'XData', PlotAxes_t3, 'YData', PlotAxes_acc3(1,:));
-                  set(haccy3, 'XData', PlotAxes_t3, 'YData', PlotAxes_acc3(2,:));
-                  set(haccz3, 'XData', PlotAxes_t3, 'YData', PlotAxes_acc3(3,:));
 % 
 %                       drawnow  
 
