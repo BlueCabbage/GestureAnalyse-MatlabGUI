@@ -1502,7 +1502,7 @@ edit_index = 0;
 edit_index2 = 0;
 ResultEditIndex = 0;
 
-PlotAxesLen = 30;
+PlotAxesLen = 10;
 
 
 axes_plot = handles.axes4;
@@ -1532,14 +1532,14 @@ hy = plot(PlotAxes_t, PlotAxes(2,:), '-sb');
 hz = plot(PlotAxes_t, PlotAxes(3,:), '-*r');
 
 haccx1 = plot(PlotAxes_t, PlotAxes_acc1(1,:), '-c');
-haccy1 = plot(PlotAxes_t, PlotAxes_acc1(2,:), '-m');
-haccz1 = plot(PlotAxes_t, PlotAxes_acc1(3,:), '-y');
+haccy1 = plot(PlotAxes_t, PlotAxes_acc1(2,:), '-y');
+haccz1 = plot(PlotAxes_t, PlotAxes_acc1(3,:), '-k');
 
 grid on;
 axis([0, PlotAxesLen, -1.5, 1.5]);
 % axis([0, PlotAxesLen, -7, 7]);
 
-legend('X_1_#-angle', 'Y_1_#-angle', 'Z_1_3-angle', 'accX_1_#', 'accY_1_#', 'accZ_1_#');
+legend('X_1_#-angle', 'Y_1_#-angle', 'Z_1_3-angle', 'accX');
 
 
 axes(handles.axes5);
@@ -1549,14 +1549,14 @@ hy2 = plot(PlotAxes_t2, PlotAxes2(2,:), '-sb');
 hz2 = plot(PlotAxes_t2, PlotAxes2(3,:), '-*r');
 
 haccx2 = plot(PlotAxes_t2, PlotAxes_acc2(1,:), '-c');
-haccy2 = plot(PlotAxes_t2, PlotAxes_acc2(2,:), '-m');
-haccz2 = plot(PlotAxes_t2, PlotAxes_acc2(3,:), '-y');
+haccy2 = plot(PlotAxes_t2, PlotAxes_acc2(2,:), '-y');
+haccz2 = plot(PlotAxes_t2, PlotAxes_acc2(3,:), '-k');
 
 grid on;
 axis([0, PlotAxesLen, -1.5, 1.5]);
 % axis([0, PlotAxesLen, -7, 7]);
 
-legend('X_2_#-angle', 'Y_2_#-angle', 'Z_2_#-angle', 'accX_2_#', 'accY_2_#', 'accZ_2_#');
+legend('X_2_#-angle', 'Y_2_#-angle', 'Z_2_#-angle');
 
 
 axes(handles.axes7);
@@ -1566,14 +1566,14 @@ hy3 = plot(PlotAxes_t3, PlotAxes3(2,:), '-sb');
 hz3 = plot(PlotAxes_t3, PlotAxes3(3,:), '-*r');
 
 haccx3 = plot(PlotAxes_t3, PlotAxes_acc3(1,:), '-c');
-haccy3 = plot(PlotAxes_t3, PlotAxes_acc3(2,:), '-m');
-haccz3 = plot(PlotAxes_t3, PlotAxes_acc3(3,:), '-y');
+haccy3 = plot(PlotAxes_t3, PlotAxes_acc3(2,:), '-y');
+haccz3 = plot(PlotAxes_t3, PlotAxes_acc3(3,:), '-k');
 
 grid on;
 axis([0, PlotAxesLen, -1.5, 1.5]);
 
 % legend('angle-X', 'angle-Y', 'andgle-Z');
-legend('X_3_#-angle', 'Y_3_#-angle', 'Z_3_#-angle', 'accX_3_#', 'accY_3_#', 'accZ_3_#');
+legend('X_3_#-angle', 'Y_3_#-angle', 'Z_3_#-angle');
 %legend('output-X', 'output-Y', 'output-R');
 
 
