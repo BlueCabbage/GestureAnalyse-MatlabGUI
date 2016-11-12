@@ -252,7 +252,7 @@ for index = 1 : origin_size -1
 
 end
 
-delta_origin_acc = (delta_origin_left_acc - delta_origin_right_acc) / 2;
+delta_origin_acc = (delta_origin_left_acc + delta_origin_right_acc) / 2;
 delta_origin_gyro = (delta_origin_left_gyro - delta_origin_right_gyro) / 2;
 delta_origin_att = (delta_origin_left_att - delta_origin_right_att) / 2;
 
@@ -356,7 +356,7 @@ for index = 1 : remote_size -1
 
 end
 
-delta_remote_acc = (delta_remote_left_acc - delta_remote_right_acc) / 2;
+delta_remote_acc = (delta_remote_left_acc + delta_remote_right_acc) / 2;
 delta_remote_gyro = (delta_remote_left_gyro - delta_remote_right_gyro) / 2;
 delta_remote_att = (delta_remote_left_att - delta_remote_right_att) / 2;
 
@@ -370,9 +370,16 @@ for index = 1 : remote_size
 % % %     m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 1) .* delta_remote_gyro(index, 1) ...
 % % %                             + delta_remote_gyro(index, 2) .* delta_remote_gyro(index, 2) ...
 % % %                             + delta_remote_gyro(index, 3) .* delta_remote_gyro(index, 3)));
-                        
-    m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 2) .* delta_remote_acc(index, 2)));
-    m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 2) .* delta_remote_gyro(index, 2)));
+% % %                         
+% % %     m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 2) .* delta_remote_acc(index, 2)));
+% % %     m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 2) .* delta_remote_gyro(index, 2)));
+% % %     m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 1) .* delta_remote_acc(index, 1) ...
+% % %                             + delta_remote_acc(index, 2) .* delta_remote_acc(index, 2) ...
+% % %                             + delta_remote_acc(index, 3) .* delta_remote_acc(index, 3)));
+% % %     m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 1) .* delta_remote_gyro(index, 1) ...
+% % %                             + delta_remote_gyro(index, 2) .* delta_remote_gyro(index, 2) ...
+% % %                             + delta_remote_gyro(index, 3) .* delta_remote_gyro(index, 3)));
+
 end
 
 % % % tmp_origin_left_att ./ delta_origin_left_acc

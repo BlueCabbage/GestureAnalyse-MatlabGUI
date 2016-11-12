@@ -212,7 +212,7 @@ title('dual-acc');
 %%%%  Origin
 %%%%  delta-theta
 
-SLIDE_WINDOWS_WIDTH = 15;
+SLIDE_WINDOWS_WIDTH = 0;
 
 origin_size = min(min(size(origin_left_att, 1), size(origin_left_acc, 1)), ...
     min(size(origin_right_att, 1), size(origin_right_acc, 1))) - SLIDE_WINDOWS_WIDTH;
@@ -316,7 +316,7 @@ title('-- Origin --');
 %%%%  Remote 
 %%%%  delta-theta
 
-SLIDE_WINDOWS_WIDTH = 50;
+SLIDE_WINDOWS_WIDTH = 0;
 
 remote_size = min(min(size(remote_left_att, 1), size(remote_left_acc, 1)), ...
     min(size(remote_right_att, 1), size(remote_right_acc, 1))) - SLIDE_WINDOWS_WIDTH;
@@ -356,7 +356,7 @@ for index = 1 : remote_size -1
 
 end
 
-delta_remote_acc = (delta_remote_left_acc + delta_remote_right_acc) / 2;
+delta_remote_acc = (delta_remote_left_acc - delta_remote_right_acc) / 2;
 delta_remote_gyro = (delta_remote_left_gyro - delta_remote_right_gyro) / 2;
 delta_remote_att = (delta_remote_left_att - delta_remote_right_att) / 2;
 
@@ -370,9 +370,15 @@ for index = 1 : remote_size
 % % %     m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 1) .* delta_remote_gyro(index, 1) ...
 % % %                             + delta_remote_gyro(index, 2) .* delta_remote_gyro(index, 2) ...
 % % %                             + delta_remote_gyro(index, 3) .* delta_remote_gyro(index, 3)));
-                        
-    m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 2) .* delta_remote_acc(index, 2)));
-    m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 2) .* delta_remote_gyro(index, 2)));
+% % %                         
+% % %     m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 2) .* delta_remote_acc(index, 2)));
+% % %     m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 2) .* delta_remote_gyro(index, 2)));
+
+    m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 1) .* delta_remote_acc(index, 1) ...
+                            + delta_remote_acc(index, 3) .* delta_remote_acc(index, 3)));
+    m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 1) .* delta_remote_gyro(index, 1) ...
+                            + delta_remote_gyro(index, 3) .* delta_remote_gyro(index, 3)));
+
 end
 
 % % % tmp_origin_left_att ./ delta_origin_left_acc
