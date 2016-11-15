@@ -42,10 +42,10 @@ title('origin-angle');
 % acc
 % x-x, y-z
 subplot(2,3,4);
-tmp_t = [1: 1: size(origin_left_acc(:,1), 1)];
+tmp_t = [1: 1: size(origin_left_acc(:,2), 1)];
 plot(tmp_t, origin_left_acc(:,2), 'rs-');
 hold on;
-tmp_t = [1: 1: size(origin_right_acc(:,1), 1)];
+tmp_t = [1: 1: size(origin_right_acc(:,2), 1)];
 plot(tmp_t, origin_right_acc(:,2), 'b*-');
 grid on;
 legend('left', 'right');
@@ -67,9 +67,9 @@ title('origin-angle');
 % acc
 % x-x, y-z
 subplot(2,3,4);
-plot(origin_left_acc(:,1), origin_left_acc(:,3), 'rs-');
+plot(origin_left_acc(:,1), origin_left_acc(:,2), 'rs-');
 hold on;
-plot(origin_right_acc(:,1), origin_right_acc(:,3), 'b*-');
+plot(origin_right_acc(:,1), origin_right_acc(:,2), 'b*-');
 grid on;
 legend('left', 'right');
 title('origin-acc');
@@ -133,9 +133,9 @@ title('remote-angle');
 % acc
 % x-x, y-z
 subplot(2,3,5);
-plot(remote_left_acc(:,1), remote_left_acc(:,3), 'rs-');
+plot(remote_left_acc(:,1), remote_left_acc(:,2), 'rs-');
 hold on;
-plot(remote_right_acc(:,1), remote_right_acc(:,3), 'b*-');
+plot(remote_right_acc(:,1), remote_right_acc(:,2), 'b*-');
 grid on;
 legend('left', 'right');
 title('remote-acc');
@@ -212,7 +212,7 @@ title('dual-acc');
 %%%%  Origin
 %%%%  delta-theta
 
-SLIDE_WINDOWS_WIDTH = 15;
+SLIDE_WINDOWS_WIDTH = 0;
 
 origin_size = min(min(size(origin_left_att, 1), size(origin_left_acc, 1)), ...
     min(size(origin_right_att, 1), size(origin_right_acc, 1))) - SLIDE_WINDOWS_WIDTH;
@@ -239,18 +239,21 @@ for index = 1 : origin_size
     delta_origin_right_gyro(index, :) = sum(origin_right_gyro(index : (index + SLIDE_WINDOWS_WIDTH), :))/(SLIDE_WINDOWS_WIDTH + 1);
 end
 
-for index = 1 : origin_size -1
-   delta_origin_left_acc(index, :) = origin_left_acc(index + 1, :) - origin_left_acc(index, :); 
-%    delta_origin_left_t(index) = sum(delta_origin_left_att(index, 1) / delta_origin_left_gyro(index, 1) ...
-%                                     + delta_origin_left_att(index, 2) / delta_origin_left_gyro(index, 2) ...
-%                                     + delta_origin_left_att(index, 3) / delta_origin_left_gyro(index, 3)) / 3;
-   
-   delta_origin_right_acc(index, :) = origin_right_acc(index + 1, :) - origin_right_acc(index, :);
-%    delta_origin_right_t(index) = sum(delta_origin_right_att(index, 1) / delta_origin_right_gyro(index, 1) ...
-%                                     + delta_origin_right_att(index, 2) / delta_origin_right_gyro(index, 2) ...
-%                                     + delta_origin_right_att(index, 3) / delta_origin_right_gyro(index, 3)) / 3;
+% for index = 1 : origin_size -1
+%    delta_origin_left_acc(index, :) = origin_left_acc(index + 1, :) - origin_left_acc(index, :); 
+% %    delta_origin_left_t(index) = sum(delta_origin_left_att(index, 1) / delta_origin_left_gyro(index, 1) ...
+% %                                     + delta_origin_left_att(index, 2) / delta_origin_left_gyro(index, 2) ...
+% %                                     + delta_origin_left_att(index, 3) / delta_origin_left_gyro(index, 3)) / 3;
+%    
+%    delta_origin_right_acc(index, :) = origin_right_acc(index + 1, :) - origin_right_acc(index, :);
+% %    delta_origin_right_t(index) = sum(delta_origin_right_att(index, 1) / delta_origin_right_gyro(index, 1) ...
+% %                                     + delta_origin_right_att(index, 2) / delta_origin_right_gyro(index, 2) ...
+% %                                     + delta_origin_right_att(index, 3) / delta_origin_right_gyro(index, 3)) / 3;
+% 
+% end
 
-end
+delta_orign_right_acc = origin_right_acc(1:origin_size, :);
+delta_origin_left_acc = origin_left_acc(1:origin_size, :);
 
 delta_origin_acc = (delta_origin_left_acc - delta_origin_right_acc) / 2;
 delta_origin_gyro = (delta_origin_left_gyro - delta_origin_right_gyro) / 2;
@@ -260,12 +263,19 @@ m_delta_origin_acc = zeros(1, origin_size);
 m_delta_origin_gyro = zeros(1, origin_size);
 
 for index = 1 : origin_size
-    m_delta_origin_acc(index) = sqrt( abs(delta_origin_acc(index, 1) .* delta_origin_acc(index, 1) ...
-                            + delta_origin_acc(index, 2) .* delta_origin_acc(index, 2) ...
-                            + delta_origin_acc(index, 3) .* delta_origin_acc(index, 3)));
+%     m_delta_origin_acc(index) = sqrt( abs(delta_origin_acc(index, 1) .* delta_origin_acc(index, 1) ...
+%                             + delta_origin_acc(index, 2) .* delta_origin_acc(index, 2) ...
+%                             + delta_origin_acc(index, 3) .* delta_origin_acc(index, 3)));
     m_delta_origin_gyro(index) = sqrt( abs(delta_origin_left_gyro(index, 1) .* delta_origin_gyro(index, 1) ...
                             + delta_origin_gyro(index, 2) .* delta_origin_gyro(index, 2) ...
                             + delta_origin_gyro(index, 3) .* delta_origin_gyro(index, 3)));
+
+    m_delta_origin_acc(index) = sqrt( abs(delta_origin_acc(index, 2) .* delta_origin_acc(index, 2)));
+                        
+% % %     m_delta_origin_acc(index) = sqrt( abs(delta_origin_acc(index, 1) .* delta_origin_acc(index, 1) ...
+% % %                             + delta_origin_acc(index, 3) .* delta_origin_acc(index, 3)));
+% % %     m_delta_origin_gyro(index) = sqrt( abs(delta_origin_left_gyro(index, 1) .* delta_origin_gyro(index, 1) ...
+% % %                             + delta_origin_gyro(index, 3) .* delta_origin_gyro(index, 3)));
 end
 
 % % % tmp_origin_left_att ./ delta_origin_left_acc
@@ -293,6 +303,24 @@ std(kdt)
 % % % origin_left_vec = delta_origin_left_acc .* origin_left_dt;
 % % % origin_right_vec = delta_origin_right_acc .* origin_right_dt;
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%  Slide_Windows_Filter
+%%%%  Origin
+
+SLIDE_WINDOWS_WIDTH = 30;
+
+origin_size = size(m_delta_origin_acc, 2) - SLIDE_WINDOWS_WIDTH;
+
+fm_delta_origin_acc = zeros(size(m_delta_origin_acc));
+
+for index = 1 : origin_size 
+    fm_delta_origin_acc(index) = sum(m_delta_origin_acc(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
+end
+
+
+
 figure(4);
 
 subplot(1, 2, 1);
@@ -302,7 +330,10 @@ hold on;
 tmp_t = [1: 1: size(delta_origin_att(:,1), 1)];
 plot(tmp_t, delta_origin_att(:,2), 'b*-');
 grid on;
-legend('base-acc', 'ekf-att');
+
+tmp_t = [1: 1: size(fm_delta_origin_acc, 2)];
+plot(tmp_t, fm_delta_origin_acc, 'g^-');
+legend('base-acc', 'ekf-att', 'filtered');
 title('-- Origin --');
 
 
@@ -311,7 +342,7 @@ title('-- Origin --');
 %%%%  Remote 
 %%%%  delta-theta
 
-SLIDE_WINDOWS_WIDTH = 50;
+SLIDE_WINDOWS_WIDTH = 0;
 
 remote_size = min(min(size(remote_left_att, 1), size(remote_left_acc, 1)), ...
     min(size(remote_right_att, 1), size(remote_right_acc, 1))) - SLIDE_WINDOWS_WIDTH;
@@ -338,18 +369,22 @@ for index = 1 : remote_size
     delta_remote_right_gyro(index, :) = sum(remote_right_gyro(index : (index + SLIDE_WINDOWS_WIDTH), :))/(SLIDE_WINDOWS_WIDTH + 1);
 end
 
-for index = 1 : remote_size -1
-   delta_remote_left_acc(index, :) = remote_left_acc(index + 1, :) - remote_left_acc(index, :); 
-%    delta_origin_left_t(index) = sum(delta_origin_left_att(index, 1) / delta_origin_left_gyro(index, 1) ...
-%                                     + delta_origin_left_att(index, 2) / delta_origin_left_gyro(index, 2) ...
-%                                     + delta_origin_left_att(index, 3) / delta_origin_left_gyro(index, 3)) / 3;
-   
-   delta_remote_right_acc(index, :) = remote_right_acc(index + 1, :) - remote_right_acc(index, :);
-%    delta_origin_right_t(index) = sum(delta_origin_right_att(index, 1) / delta_origin_right_gyro(index, 1) ...
-%                                     + delta_origin_right_att(index, 2) / delta_origin_right_gyro(index, 2) ...
-%                                     + delta_origin_right_att(index, 3) / delta_origin_right_gyro(index, 3)) / 3;
+% % % for index = 1 : remote_size -1
+% % %    delta_remote_left_acc(index, :) = remote_left_acc(index + 1, :) - remote_left_acc(index, :); 
+% % % %    delta_origin_left_t(index) = sum(delta_origin_left_att(index, 1) / delta_origin_left_gyro(index, 1) ...
+% % % %                                     + delta_origin_left_att(index, 2) / delta_origin_left_gyro(index, 2) ...
+% % % %                                     + delta_origin_left_att(index, 3) / delta_origin_left_gyro(index, 3)) / 3;
+% % %    
+% % %    delta_remote_right_acc(index, :) = remote_right_acc(index + 1, :) - remote_right_acc(index, :);
+% % % %    delta_origin_right_t(index) = sum(delta_origin_right_att(index, 1) / delta_origin_right_gyro(index, 1) ...
+% % % %                                     + delta_origin_right_att(index, 2) / delta_origin_right_gyro(index, 2) ...
+% % % %                                     + delta_origin_right_att(index, 3) / delta_origin_right_gyro(index, 3)) / 3;
+% % % 
+% % % end
 
-end
+delta_remote_left_acc = remote_left_acc(1:remote_size, :);
+delta_remote_right_acc = remote_right_acc(1:remote_size, :);
+
 
 delta_remote_acc = (delta_remote_left_acc - delta_remote_right_acc) / 2;
 delta_remote_gyro = (delta_remote_left_gyro - delta_remote_right_gyro) / 2;
@@ -359,12 +394,21 @@ m_delta_remote_acc = zeros(1, remote_size);
 m_delta_remote_gyro = zeros(1, remote_size);
 
 for index = 1 : remote_size
-    m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 1) .* delta_remote_acc(index, 1) ...
-                            + delta_remote_acc(index, 2) .* delta_remote_acc(index, 2) ...
-                            + delta_remote_acc(index, 3) .* delta_remote_acc(index, 3)));
+%     m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 1) .* delta_remote_acc(index, 1) ...
+%                             + delta_remote_acc(index, 2) .* delta_remote_acc(index, 2) ...
+%                             + delta_remote_acc(index, 3) .* delta_remote_acc(index, 3)));
     m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 1) .* delta_remote_gyro(index, 1) ...
                             + delta_remote_gyro(index, 2) .* delta_remote_gyro(index, 2) ...
                             + delta_remote_gyro(index, 3) .* delta_remote_gyro(index, 3)));
+                        
+    m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 2) .* delta_remote_acc(index, 2)));
+% % % % %     m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 2) .* delta_remote_gyro(index, 2)));
+% % % 
+% % %     m_delta_remote_acc(index) = sqrt( abs(delta_remote_acc(index, 1) .* delta_remote_acc(index, 1) ...
+% % %                             + delta_remote_acc(index, 3) .* delta_remote_acc(index, 3)));
+% % %     m_delta_remote_gyro(index) = sqrt( abs(delta_remote_left_gyro(index, 1) .* delta_remote_gyro(index, 1) ...
+% % %                             + delta_remote_gyro(index, 3) .* delta_remote_gyro(index, 3)));
+
 end
 
 % % % tmp_origin_left_att ./ delta_origin_left_acc
@@ -386,6 +430,23 @@ var(kdt)
 display('Remote[m_gyro/m_delta_acc]_std: ');
 std(kdt)
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%  Slide_Windows_Filter
+%%%%  Remote
+
+SLIDE_WINDOWS_WIDTH = 30;
+
+remote_size = size(m_delta_remote_acc, 2)  - SLIDE_WINDOWS_WIDTH;
+
+fm_delta_remote_acc = zeros(size(m_delta_remote_acc));
+
+for index = 1 : remote_size
+    fm_delta_remote_acc(index) = sum(m_delta_remote_acc(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
+end
+
+
+
 figure(4);
 
 subplot(1, 2, 2);
@@ -395,7 +456,10 @@ hold on;
 tmp_t = [1: 1: size(delta_remote_att(:,1), 1)];
 plot(tmp_t, delta_remote_att(:,2), 'b*-');
 grid on;
-legend('base-acc', 'ekf-att');
+
+tmp_t = [1: 1: size(fm_delta_remote_acc, 2)];
+plot(tmp_t, fm_delta_remote_acc, 'g^-');
+legend('base-acc', 'ekf-att', 'filtered');
 title('-- Remote --');
 
 % origin_left_dt = sum(delta_remote_left_t) / (size(delta_remote_left_t, 1)-1)

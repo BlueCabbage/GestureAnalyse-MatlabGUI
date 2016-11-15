@@ -59,7 +59,7 @@ function sub_f_callback(s, BytesAvailable, handles, editout, edit, edit14, edit2
             dat_tmp(8,1) = data(9) - offset_a_y;
             dat_tmp(9,1) = data(10) - offset_a_z;
             
-            plotdat_tmp = [data(8)/5, data(9)/5, data(10)/5]';
+            plotdat_tmp = [data(8)/7, data(9)/7, data(10)/7]';
             
             PlotAxes_acc1 = [plotdat_tmp, PlotAxes_acc1(:, 1:PlotAxesLen-1)];
 
@@ -190,7 +190,7 @@ function sub_f_callback(s, BytesAvailable, handles, editout, edit, edit14, edit2
             dat_tmp(9,1) = data2(10) - offset_a_z;
 
              
-            plotdat_tmp = [data2(8)/5, data(9)/5, data(10)/5]';
+            plotdat_tmp = [data2(8)/7, data(9)/7, data(10)/7]';
             
             PlotAxes_acc2 = [plotdat_tmp, PlotAxes_acc2(:, 1:PlotAxesLen-1)];
             
@@ -313,7 +313,7 @@ function sub_f_callback(s, BytesAvailable, handles, editout, edit, edit14, edit2
             dat_tmp(2,1) = data3(3);
             dat_tmp(3,1) = data3(4);
             
-            plotdat_tmp = [data3(8)/5, data(9)/5, data(10)/5]';
+            plotdat_tmp = [data3(8)/7, data(9)/7, data(10)/7]';
             
             PlotAxes_acc3 = [plotdat_tmp, PlotAxes_acc3(:, 1:PlotAxesLen-1)];
 

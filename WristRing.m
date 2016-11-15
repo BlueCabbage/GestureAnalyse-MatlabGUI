@@ -1593,7 +1593,7 @@ plot(PlotAxes_t, PlotAxes(2,:), '-sb');
 plot(PlotAxes_t, PlotAxes(2,:), '-*r');
 legend('X_1_#-angle', 'Y_1_#-angle', 'Z_1_3-angle');
 grid on;
-axis([0, PlotAxesLen, -7, 7]);
+axis([0, PlotAxesLen, -10, 10]);
 
 axes(handles.axes9);
 plot(PlotAxes_t, PlotAxes(1,:), '-^g');
@@ -1602,7 +1602,7 @@ plot(PlotAxes_t, PlotAxes(2,:), '-sb');
 plot(PlotAxes_t, PlotAxes(2,:), '-*r');
 legend('X_2_#-angle', 'Y_2_#-angle', 'Z_2_#-angle');
 grid on;
-axis([0, PlotAxesLen, -7, 7]);
+axis([0, PlotAxesLen, -10, 10]);
 
 axes(handles.axes10);
 plot(PlotAxes_t, PlotAxes(1,:), '-^g');
@@ -1611,7 +1611,7 @@ plot(PlotAxes_t, PlotAxes(2,:), '-sb');
 plot(PlotAxes_t, PlotAxes(2,:), '-*r');
 legend('angle-X', 'angle-Y', 'andgle-Z');
 grid on;
-axis([0, PlotAxesLen, -7, 7]);
+axis([0, PlotAxesLen, -10, 10]);
 
 
 BaseAxes = 1.5 * [0, 1, 0, 0, 0, 0; 0, 0, 0, 1, 0, 0; 0, 0, 0, 0, 0, 1];
