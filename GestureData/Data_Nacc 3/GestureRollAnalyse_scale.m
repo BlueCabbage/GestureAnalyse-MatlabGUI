@@ -212,7 +212,7 @@ title('dual-acc');
 %%%%  Origin
 %%%%  delta-theta
 
-SLIDE_WINDOWS_WIDTH = 5;
+SLIDE_WINDOWS_WIDTH = 0;
 
 origin_size = min(min(size(origin_left_att, 1), size(origin_left_acc, 1)), ...
     min(size(origin_right_att, 1), size(origin_right_acc, 1))) - SLIDE_WINDOWS_WIDTH;
@@ -303,6 +303,24 @@ std(kdt)
 % % % origin_left_vec = delta_origin_left_acc .* origin_left_dt;
 % % % origin_right_vec = delta_origin_right_acc .* origin_right_dt;
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%  Slide_Windows_Filter
+%%%%  Origin
+
+SLIDE_WINDOWS_WIDTH = 30;
+
+origin_size = size(m_delta_origin_acc, 2) - SLIDE_WINDOWS_WIDTH;
+
+fm_delta_origin_acc = zeros(size(m_delta_origin_acc));
+
+for index = 1 : origin_size 
+    fm_delta_origin_acc(index) = sum(m_delta_origin_acc(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
+end
+
+
+
 figure(4);
 
 subplot(1, 2, 1);
@@ -312,7 +330,10 @@ hold on;
 tmp_t = [1: 1: size(delta_origin_att(:,1), 1)];
 plot(tmp_t, delta_origin_att(:,2), 'b*-');
 grid on;
-legend('base-acc', 'ekf-att');
+
+tmp_t = [1: 1: size(fm_delta_origin_acc, 2)];
+plot(tmp_t, fm_delta_origin_acc, 'g^-');
+legend('base-acc', 'ekf-att', 'filtered');
 title('-- Origin --');
 
 
@@ -409,6 +430,23 @@ var(kdt)
 display('Remote[m_gyro/m_delta_acc]_std: ');
 std(kdt)
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%  Slide_Windows_Filter
+%%%%  Remote
+
+SLIDE_WINDOWS_WIDTH = 30;
+
+remote_size = size(m_delta_remote_acc, 2)  - SLIDE_WINDOWS_WIDTH;
+
+fm_delta_remote_acc = zeros(size(m_delta_remote_acc));
+
+for index = 1 : remote_size
+    fm_delta_remote_acc(index) = sum(m_delta_remote_acc(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
+end
+
+
+
 figure(4);
 
 subplot(1, 2, 2);
@@ -418,7 +456,10 @@ hold on;
 tmp_t = [1: 1: size(delta_remote_att(:,1), 1)];
 plot(tmp_t, delta_remote_att(:,2), 'b*-');
 grid on;
-legend('base-acc', 'ekf-att');
+
+tmp_t = [1: 1: size(fm_delta_remote_acc, 2)];
+plot(tmp_t, fm_delta_remote_acc, 'g^-');
+legend('base-acc', 'ekf-att', 'filtered');
 title('-- Remote --');
 
 % origin_left_dt = sum(delta_remote_left_t) / (size(delta_remote_left_t, 1)-1)
