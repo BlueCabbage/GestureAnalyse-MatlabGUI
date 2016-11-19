@@ -6,6 +6,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%
 
+clear all;
+
 figure(1);
 figure(2);
 
@@ -13,18 +15,18 @@ figure(2);
 
 load data_origin_slow.dat
 
-dat = data_origin_slow;
+ori_dat = data_origin_slow;
 
-index_left = find(dat(:,1) == 0);
-origin_left_att = dat(index_left, 2:4);
-origin_left_acc = dat(index_left, 8:10);
-origin_left_gyro = dat(index_left, 5:7);
+index_left = find(ori_dat(:,1) == 0);
+origin_left_att = ori_dat(index_left, 2:4);
+origin_left_acc = ori_dat(index_left, 8:10);
+origin_left_gyro = ori_dat(index_left, 5:7);
 
 
-index_right = find(dat(:,1) == 2);
-origin_right_att = dat(index_right, 2:4);
-origin_right_acc = dat(index_right, 8:10);
-origin_right_gyro = dat(index_right, 5:7);
+index_right = find(ori_dat(:,1) == 2);
+origin_right_att = ori_dat(index_right, 2:4);
+origin_right_acc = ori_dat(index_right, 8:10);
+origin_right_gyro = ori_dat(index_right, 5:7);
 
 figure(1);
 % att
@@ -79,17 +81,17 @@ title('origin-acc');
 
 load data_remote_slow.dat
 
-dat = data_remote_slow;
+rem_dat = data_remote_slow;
 
-index_left = find(dat(:,1) == 0);
-remote_left_att = dat(index_left, 2:4);
-remote_left_acc = dat(index_left, 8:10);
-remote_left_gyro = dat(index_left, 5:7);
+index_left = find(rem_dat(:,1) == 0);
+remote_left_att = rem_dat(index_left, 2:4);
+remote_left_acc = rem_dat(index_left, 8:10);
+remote_left_gyro = rem_dat(index_left, 5:7);
 
-index_right = find(dat(:,1) == 2);
-remote_right_att = dat(index_right, 2:4);
-remote_right_acc = dat(index_right, 8:10);
-remote_right_gyro = dat(index_right, 5:7);
+index_right = find(rem_dat(:,1) == 2);
+remote_right_att = rem_dat(index_right, 2:4);
+remote_right_acc = rem_dat(index_right, 8:10);
+remote_right_gyro = rem_dat(index_right, 5:7);
 
 figure(1);
 % att
@@ -145,17 +147,17 @@ title('remote-acc');
 
 load data_dual_slow.dat
 
-dat = data_dual_slow;
+dua_dat = data_dual_slow;
 
-index_left = find(dat(:,1) == 0);
-dual_left_att = dat(index_left, 2:4);
-dual_left_acc = dat(index_left, 8:10);
-dual_left_gyro = dat(index_left, 5:7);
+index_left = find(dua_dat(:,1) == 0);
+dual_left_att = dua_dat(index_left, 2:4);
+dual_left_acc = dua_dat(index_left, 8:10);
+dual_left_gyro = dua_dat(index_left, 5:7);
 
-index_right = find(dat(:,1) == 2);
-dual_right_att = dat(index_right, 2:4);
-dual_right_acc = dat(index_right, 8:10);
-dual_right_gyro = dat(index_right, 5:7);
+index_right = find(dua_dat(:,1) == 2);
+dual_right_att = dua_dat(index_right, 2:4);
+dual_right_acc = dua_dat(index_right, 8:10);
+dual_right_gyro = dua_dat(index_right, 5:7);
 
 
 figure(1);
@@ -252,14 +254,23 @@ end
 % 
 % end
 
-delta_orign_right_acc = origin_right_acc(1:origin_size, :);
+delta_origin_right_acc = origin_right_acc(1:origin_size, :);
 delta_origin_left_acc = origin_left_acc(1:origin_size, :);
 
-delta_origin_acc = (delta_origin_left_acc - delta_origin_right_acc) / 2;
-delta_origin_acc_ave = (delta_origin_left_acc + delta_origin_right_acc) / 2;  
+% % % delta_origin_acc = (delta_origin_left_acc - delta_origin_right_acc) / 2;
+% % % delta_origin_acc_ave = (delta_origin_left_acc + delta_origin_right_acc) / 2;  
+% % % 
+% % % delta_origin_gyro = (delta_origin_left_gyro - delta_origin_right_gyro) / 2;
+% % % delta_origin_att = (delta_origin_left_att - delta_origin_right_att) / 2;
 
-delta_origin_gyro = (delta_origin_left_gyro - delta_origin_right_gyro) / 2;
-delta_origin_att = (delta_origin_left_att - delta_origin_right_att) / 2;
+delta_origin_acc = (delta_origin_left_acc - delta_origin_right_acc);
+delta_origin_acc_ave = (delta_origin_left_acc + delta_origin_right_acc);  
+
+delta_origin_gyro = (delta_origin_left_gyro - delta_origin_right_gyro);
+delta_origin_att = (delta_origin_left_att - delta_origin_right_att);
+
+
+
 
 m_delta_origin_acc = zeros(1, origin_size);
 m_delta_origin_gyro = zeros(1, origin_size);
@@ -468,10 +479,18 @@ delta_remote_left_acc = remote_left_acc(1:remote_size, :);
 delta_remote_right_acc = remote_right_acc(1:remote_size, :);
 
 
-delta_remote_acc = (delta_remote_left_acc - delta_remote_right_acc) / 2;
-delta_remote_acc_ave = (delta_remote_left_acc + delta_remote_right_acc) / 2;
-delta_remote_gyro = (delta_remote_left_gyro - delta_remote_right_gyro) / 2;
-delta_remote_att = (delta_remote_left_att - delta_remote_right_att) / 2;
+% % % delta_remote_acc = (delta_remote_left_acc - delta_remote_right_acc) / 2;
+% % % delta_remote_acc_ave = (delta_remote_left_acc + delta_remote_right_acc) / 2;
+% % % delta_remote_gyro = (delta_remote_left_gyro - delta_remote_right_gyro) / 2;
+% % % delta_remote_att = (delta_remote_left_att - delta_remote_right_att) / 2;
+
+
+delta_remote_acc = (delta_remote_left_acc - delta_remote_right_acc);
+delta_remote_acc_ave = (delta_remote_left_acc + delta_remote_right_acc);
+delta_remote_gyro = (delta_remote_left_gyro - delta_remote_right_gyro);
+delta_remote_att = (delta_remote_left_att - delta_remote_right_att);
+
+
 
 m_delta_remote_acc = zeros(1, remote_size);
 m_delta_remote_gyro = zeros(1, remote_size);
@@ -482,10 +501,10 @@ m_delta_remote_gyro_sc = zeros(1, remote_size);
 
 for index = 1 : remote_size
 
-    m_delta_remote_gyro(index) = sign(delta_remote_gyro(index, 2)) * sqrt( abs(delta_remote_gyro(index, 2) .* delta_remote_gyro(index, 2) ...
+    m_delta_remote_gyro(index) = sign(delta_remote_att(index, 2)) * sqrt( abs(delta_remote_gyro(index, 2) .* delta_remote_gyro(index, 2) ...
                             + delta_remote_gyro(index, 3) .* delta_remote_gyro(index, 3)));
                         
-    m_delta_remote_acc(index) = delta_remote_acc(index, 2) * sqrt( abs(delta_remote_acc(index, 2) .* delta_remote_acc(index, 2) ...
+    m_delta_remote_acc(index) = sign(delta_remote_att(index, 2)) * sqrt( abs(delta_remote_acc(index, 2) .* delta_remote_acc(index, 2) ...
                             + delta_remote_acc(index, 3) .* delta_remote_acc(index, 3)));
 
     
@@ -566,7 +585,7 @@ remote_att_output = fm_remote_att(1:remote_size) .* remote_scale;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%  Slide_Windows_Filter
-%%%%  Origin_att:
+%%%%  Remote_att:
 
 SLIDE_WINDOWS_WIDTH = 30;
 
@@ -633,27 +652,9 @@ title('-- Remote --');
 
 
 
-%%%% roll-dual
-
-load data_dual_slow.dat
-
-dat = data_dual_slow;
-
-index_left = find(dat(:,1) == 0);
-dual_left_att = dat(index_left, 2:4);
-dual_left_acc = dat(index_left, 8:10);
-dual_left_gyro = dat(index_left, 5:7);
-
-index_right = find(dat(:,1) == 2);
-dual_right_att = dat(index_right, 2:4);
-dual_right_acc = dat(index_right, 8:10);
-dual_right_gyro = dat(index_right, 5:7);
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%  Origin
+%%%%  Dual
 %%%%  delta-theta
 
 SLIDE_WINDOWS_WIDTH = 0;
@@ -799,10 +800,7 @@ dual_scale = abs((fm_delta_dual_acc_sc(1:dual_size))./ fm_dual_att(1:dual_size))
 dual_att_output = fm_dual_att(1:dual_size) .* dual_scale;
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%  Slide_Windows_Filter
-%%%%  Dual_att:
-
+%%%%%%%%%%%%%%%%%%%%%%%%%% 
 SLIDE_WINDOWS_WIDTH = 30;
 
 dual_size = size(dual_att_output, 2) - SLIDE_WINDOWS_WIDTH;
@@ -827,5 +825,6 @@ tmp_t = [1: 1: size(f_dual_att_output, 2)];
 plot(tmp_t, f_dual_att_output, 'g^-');
 legend('base-acc', 'ekf-att', 'output');
 title('-- Dual --');
+
 
 

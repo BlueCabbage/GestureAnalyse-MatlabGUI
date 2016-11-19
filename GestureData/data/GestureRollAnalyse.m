@@ -632,21 +632,200 @@ title('-- Remote --');
 
 
 
-% SLIDE_WINDOWS_WIDTH = 3;
+
+%%%% roll-dual
+
+load data_dual_slow.dat
+
+dat = data_dual_slow;
+
+index_left = find(dat(:,1) == 0);
+dual_left_att = dat(index_left, 2:4);
+dual_left_acc = dat(index_left, 8:10);
+dual_left_gyro = dat(index_left, 5:7);
+
+index_right = find(dat(:,1) == 2);
+dual_right_att = dat(index_right, 2:4);
+dual_right_acc = dat(index_right, 8:10);
+dual_right_gyro = dat(index_right, 5:7);
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%  Origin
+%%%%  delta-theta
+
+SLIDE_WINDOWS_WIDTH = 0;
+
+dual_size = min(min(size(dual_left_att, 1), size(dual_left_acc, 1)), ...
+    min(size(dual_right_att, 1), size(dual_right_acc, 1))) - SLIDE_WINDOWS_WIDTH;
+
+delta_dual_left_att = zeros(dual_size, 3);
+delta_dual_left_acc = zeros(dual_size, 3);
+delta_dual_left_gyro = zeros(dual_size, 3);
+delta_dual_left_t = zeros(dual_size, 1);
+
+delta_dual_right_att = zeros(dual_size, 3);
+delta_dual_right_acc = zeros(dual_size, 3);
+delta_dual_right_gyro = zeros(dual_size, 3);
+delta_dual_right_t = zeros(dual_size, 1);
+
+% origin_left_att & origin_left_acc
+% origin_right_att & origin_right_acc
+for index = 1 : dual_size
+    delta_dual_left_att(index, :) = sum(dual_left_att(index : (index + SLIDE_WINDOWS_WIDTH), :))/(SLIDE_WINDOWS_WIDTH + 1);
+    delta_dual_left_acc(index, :) = sum(dual_left_acc(index : (index + SLIDE_WINDOWS_WIDTH), :))/(SLIDE_WINDOWS_WIDTH + 1);
+    delta_dual_left_gyro(index, :) = sum(dual_left_gyro(index : (index + SLIDE_WINDOWS_WIDTH), :))/(SLIDE_WINDOWS_WIDTH + 1);
+    
+    delta_dual_right_att(index, :) = sum(dual_right_att(index : (index + SLIDE_WINDOWS_WIDTH), :))/(SLIDE_WINDOWS_WIDTH + 1);
+    delta_dual_right_acc(index, :) = sum(dual_right_acc(index : (index + SLIDE_WINDOWS_WIDTH), :))/(SLIDE_WINDOWS_WIDTH + 1);
+    delta_dual_right_gyro(index, :) = sum(dual_right_gyro(index : (index + SLIDE_WINDOWS_WIDTH), :))/(SLIDE_WINDOWS_WIDTH + 1);
+end
+
+% for index = 1 : origin_size -1
+%    delta_origin_left_acc(index, :) = origin_left_acc(index + 1, :) - origin_left_acc(index, :); 
+% %    delta_origin_left_t(index) = sum(delta_origin_left_att(index, 1) / delta_origin_left_gyro(index, 1) ...
+% %                                     + delta_origin_left_att(index, 2) / delta_origin_left_gyro(index, 2) ...
+% %                                     + delta_origin_left_att(index, 3) / delta_origin_left_gyro(index, 3)) / 3;
+%    
+%    delta_origin_right_acc(index, :) = origin_right_acc(index + 1, :) - origin_right_acc(index, :);
+% %    delta_origin_right_t(index) = sum(delta_origin_right_att(index, 1) / delta_origin_right_gyro(index, 1) ...
+% %                                     + delta_origin_right_att(index, 2) / delta_origin_right_gyro(index, 2) ...
+% %                                     + delta_origin_right_att(index, 3) / delta_origin_right_gyro(index, 3)) / 3;
 % 
-% remote_size = min(min(size(remote_left_att, 1), size(remote_left_acc, 1)), ...
-%     min(size(remote_right_att, 1), size(remote_right_acc, 1))) - SLIDE_WINDOWS_WIDTH;
-% 
-% delta_remote_left_att = zeros(remote_size, 3);
-% delta_remote_left_acc = zeros(remote_size, 3);
-% delta_remote_left_gyro = zeros(remote_size, 3);
-% delta_remote_left_t = zeros(remote_size, 1);
-% 
-% delta_remote_right_att = zeros(remote_size, 3);
-% delta_remote_right_acc = zeros(remote_size, 3);
-% delta_remote_right_gyro = zeros(remote_size, 3);
-% delta_remote_right_t = zeros(remote_size, 1);
-% 
-% for index = 1 : remote_size
-%     
 % end
+
+delta_dual_right_acc = dual_right_acc(1:dual_size, :);
+delta_dual_left_acc = dual_left_acc(1:dual_size, :);
+
+delta_dual_acc = (delta_dual_left_acc - delta_dual_right_acc) / 2;
+delta_dual_acc_ave = (delta_dual_left_acc + delta_dual_right_acc) / 2;  
+
+delta_dual_gyro = (delta_dual_left_gyro - delta_dual_right_gyro) / 2;
+delta_dual_att = (delta_dual_left_att - delta_dual_right_att) / 2;
+
+m_delta_dual_acc = zeros(1, dual_size);
+m_delta_dual_gyro = zeros(1, dual_size);
+
+m_delta_dual_acc_sc = zeros(1, dual_size);
+m_delta_dual_gyro_sc = zeros(1, dual_size); 
+m_delta_dual_acc_sc_ave = zeros(1, dual_size);
+
+
+
+for index = 1 : dual_size
+
+    m_delta_dual_acc(index) = sign(delta_dual_att(index)) * sqrt( abs(delta_dual_acc(index, 2) .* delta_dual_acc(index, 2) ...
+                            + delta_dual_acc(index, 3) .* delta_dual_acc(index, 3)));
+    m_delta_dual_gyro(index) = sign(delta_dual_att(index)) * sqrt( abs(delta_dual_left_gyro(index, 2) .* delta_dual_gyro(index, 2) ...
+                            + delta_dual_gyro(index, 3) .* delta_dual_gyro(index, 3)));
+    
+% % %     m_delta_dual_acc_sc(index) = sqrt( abs(delta_dual_acc(index, 2) .* delta_dual_acc(index, 2) ...
+% % %                             + delta_dual_acc(index, 3) .* delta_dual_acc(index, 3)));
+% % %     m_delta_dual_gyro_sc(index) = sqrt( abs(delta_dual_left_gyro(index, 2) .* delta_dual_gyro(index, 2) ...
+% % %                             + delta_dual_gyro(index, 3) .* delta_dual_gyro(index, 3)));
+
+    m_delta_dual_acc_sc(index) = sqrt( abs(delta_dual_acc(index, 2) .* delta_dual_acc(index, 2)));
+    m_delta_dual_gyro_sc(index) = sqrt( abs(delta_dual_gyro(index, 2) .* delta_dual_gyro(index, 2)));
+                        
+    m_delta_dual_acc_sc_ave(index) = sqrt( abs(delta_dual_acc_ave(index, 2) .* delta_dual_acc_ave(index, 2)));
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%%%%%
+% % % %     m_delta_dual_acc = delta_dual_acc(:, 2)'; 
+% % % %     m_delta_dual_gyro = delta_dual_gyro(:, 2)';
+
+
+
+% % % tmp_dual_left_att ./ delta_dual_left_acc
+% % % delta_dual_left_att ./ delta_dual_left_acc
+% % % delta_dual_left_gyro ./ delta_dual_left_acc
+% % % delta_dual_left_gyro ./ delta_dual_acc 
+
+kdt = (m_delta_dual_gyro ./ m_delta_dual_acc);
+
+%%%% mean
+display('dual[m_gyro/m_delta_acc]_mean: ');
+mean(kdt)
+
+%%%% var
+display('dual[m_gyro/m_delta_acc]_var: ')
+var(kdt)
+
+%%%% std
+display('dual[m_gyro/m_delta_acc]_std: ')
+std(kdt)
+
+% % % dual_left_dt = sum(delta_dual_left_t) / (size(delta_dual_left_t, 1)-1)
+% % % dual_right_dt = sum(delta_dual_right_t) / (size(delta_dual_right_t, 1)-1)
+% % % 
+% % % dual_left_vec = delta_dual_left_acc .* dual_left_dt;
+% % % dual_right_vec = delta_dual_right_acc .* dual_right_dt;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%  Slide_Windows_Filter
+%%%%  Dual:
+
+SLIDE_WINDOWS_WIDTH = 30;
+
+dual_size = size(m_delta_dual_acc, 2) - SLIDE_WINDOWS_WIDTH;
+
+fm_delta_dual_acc = zeros(size(m_delta_dual_acc));
+fm_delta_dual_acc_sc = zeros(size(m_delta_dual_acc_sc));
+fm_delta_dual_acc_sc_ave = zeros(size(m_delta_dual_acc_sc_ave));
+fm_dual_att = zeros(size(m_delta_dual_acc_sc));
+
+for index = 1 : dual_size 
+    fm_delta_dual_acc(index) = sum(m_delta_dual_acc(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
+    fm_delta_dual_acc_sc(index) = sum(m_delta_dual_acc_sc(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
+    
+    fm_delta_dual_acc_sc_ave(index) = sum(m_delta_dual_acc_sc_ave(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
+    fm_dual_att(index) = sum(delta_dual_att(index : (index + SLIDE_WINDOWS_WIDTH), 2))/(SLIDE_WINDOWS_WIDTH + 1);
+end
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+%%%% Get the scale
+%%%% Dual:
+%
+% dual_scale = ((fm_delta_dual_acc_sc(1:dual_size))./(fm_delta_dual_acc_sc(1:dual_size) + fm_delta_dual_acc_sc_ave(1:dual_size)));
+
+dual_scale = abs((fm_delta_dual_acc_sc(1:dual_size))./ fm_dual_att(1:dual_size));
+
+
+dual_att_output = fm_dual_att(1:dual_size) .* dual_scale;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%  Slide_Windows_Filter
+%%%%  Dual_att:
+
+SLIDE_WINDOWS_WIDTH = 30;
+
+dual_size = size(dual_att_output, 2) - SLIDE_WINDOWS_WIDTH;
+
+f_dual_att_output = zeros(1, dual_size);
+
+for index = 1 : dual_size 
+    f_dual_att_output(index) = sum(dual_att_output(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
+end
+
+
+figure(7);
+
+tmp_t = [1: 1: size(m_delta_dual_acc_sc, 2)];
+plot(tmp_t, m_delta_dual_acc_sc, 'rs-');
+hold on;
+tmp_t = [1: 1: size(delta_dual_att(:,1), 1)];
+plot(tmp_t, delta_dual_att(:,2), 'b*-');
+grid on;
+
+tmp_t = [1: 1: size(f_dual_att_output, 2)];
+plot(tmp_t, f_dual_att_output, 'g^-');
+legend('base-acc', 'ekf-att', 'output');
+title('-- Dual --');
+
+

@@ -696,8 +696,8 @@ end
 % 
 % end
 
-delta_dual_right_acc = dual_right_acc(1:dual_size, :);
-delta_dual_left_acc = dual_left_acc(1:dual_size, :);
+delta_dual_right_acc = dual_right_acc(1:origin_size, :);
+delta_dual_left_acc = dual_left_acc(1:origin_size, :);
 
 delta_dual_acc = (delta_dual_left_acc - delta_dual_right_acc) / 2;
 delta_dual_acc_ave = (delta_dual_left_acc + delta_dual_right_acc) / 2;  
@@ -739,93 +739,29 @@ end
 
 
 
-% % % tmp_dual_left_att ./ delta_dual_left_acc
-% % % delta_dual_left_att ./ delta_dual_left_acc
-% % % delta_dual_left_gyro ./ delta_dual_left_acc
-% % % delta_dual_left_gyro ./ delta_dual_acc 
+% % % tmp_dual_left_att ./ delta_origin_left_acc
+% % % delta_dual_left_att ./ delta_origin_left_acc
+% % % delta_origin_left_gyro ./ delta_origin_left_acc
+% % % delta_origin_left_gyro ./ delta_origin_acc 
 
-kdt = (m_delta_dual_gyro ./ m_delta_dual_acc);
+kdt = (m_delta_origin_gyro ./ m_delta_origin_acc);
 
 %%%% mean
-display('dual[m_gyro/m_delta_acc]_mean: ');
+display('origin[m_gyro/m_delta_acc]_mean: ');
 mean(kdt)
 
 %%%% var
-display('dual[m_gyro/m_delta_acc]_var: ')
+display('origin[m_gyro/m_delta_acc]_var: ')
 var(kdt)
 
 %%%% std
-display('dual[m_gyro/m_delta_acc]_std: ')
+display('origin[m_gyro/m_delta_acc]_std: ')
 std(kdt)
 
-% % % dual_left_dt = sum(delta_dual_left_t) / (size(delta_dual_left_t, 1)-1)
-% % % dual_right_dt = sum(delta_dual_right_t) / (size(delta_dual_right_t, 1)-1)
+% % % origin_left_dt = sum(delta_origin_left_t) / (size(delta_origin_left_t, 1)-1)
+% % % origin_right_dt = sum(delta_origin_right_t) / (size(delta_origin_right_t, 1)-1)
 % % % 
-% % % dual_left_vec = delta_dual_left_acc .* dual_left_dt;
-% % % dual_right_vec = delta_dual_right_acc .* dual_right_dt;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%  Slide_Windows_Filter
-%%%%  Dual:
-
-SLIDE_WINDOWS_WIDTH = 30;
-
-dual_size = size(m_delta_dual_acc, 2) - SLIDE_WINDOWS_WIDTH;
-
-fm_delta_dual_acc = zeros(size(m_delta_dual_acc));
-fm_delta_dual_acc_sc = zeros(size(m_delta_dual_acc_sc));
-fm_delta_dual_acc_sc_ave = zeros(size(m_delta_dual_acc_sc_ave));
-fm_dual_att = zeros(size(m_delta_dual_acc_sc));
-
-for index = 1 : dual_size 
-    fm_delta_dual_acc(index) = sum(m_delta_dual_acc(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
-    fm_delta_dual_acc_sc(index) = sum(m_delta_dual_acc_sc(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
-    
-    fm_delta_dual_acc_sc_ave(index) = sum(m_delta_dual_acc_sc_ave(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
-    fm_dual_att(index) = sum(delta_dual_att(index : (index + SLIDE_WINDOWS_WIDTH), 2))/(SLIDE_WINDOWS_WIDTH + 1);
-end
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
-%%%% Get the scale
-%%%% Dual:
-%
-% dual_scale = ((fm_delta_dual_acc_sc(1:dual_size))./(fm_delta_dual_acc_sc(1:dual_size) + fm_delta_dual_acc_sc_ave(1:dual_size)));
-
-dual_scale = abs((fm_delta_dual_acc_sc(1:dual_size))./ fm_dual_att(1:dual_size));
-
-
-dual_att_output = fm_dual_att(1:dual_size) .* dual_scale;
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%  Slide_Windows_Filter
-%%%%  Dual_att:
-
-SLIDE_WINDOWS_WIDTH = 30;
-
-dual_size = size(dual_att_output, 2) - SLIDE_WINDOWS_WIDTH;
-
-f_dual_att_output = zeros(1, dual_size);
-
-for index = 1 : dual_size 
-    f_dual_att_output(index) = sum(dual_att_output(index : (index + SLIDE_WINDOWS_WIDTH)))/(SLIDE_WINDOWS_WIDTH + 1);
-end
-
-
-figure(7);
-
-tmp_t = [1: 1: size(m_delta_dual_acc_sc, 2)];
-plot(tmp_t, m_delta_dual_acc_sc, 'rs-');
-hold on;
-tmp_t = [1: 1: size(delta_dual_att(:,1), 1)];
-plot(tmp_t, delta_dual_att(:,2), 'b*-');
-grid on;
-
-tmp_t = [1: 1: size(f_dual_att_output, 2)];
-plot(tmp_t, f_dual_att_output, 'g^-');
-legend('base-acc', 'ekf-att', 'output');
-title('-- Dual --');
+% % % origin_left_vec = delta_origin_left_acc .* origin_left_dt;
+% % % origin_right_vec = delta_origin_right_acc .* origin_right_dt;
 
 
